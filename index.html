@@ -3,70 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎉 Jura Events</title>
+  <title>🎉 Jura Events — Doodle</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Segoe UI',sans-serif;background:#1a1a2e;color:#eee;min-height:100vh}
     header{background:linear-gradient(135deg,#16213e,#1a6b3a);padding:14px 20px;display:flex;align-items:center;gap:12px;border-bottom:2px solid #2ecc71;position:sticky;top:0;z-index:100}
     header h1{font-size:1.2rem;color:#fff}
-    header .sub{font-size:0.75rem;color:#aaa}
-    .badge{background:#2ecc71;color:#111;padding:4px 12px;border-radius:20px;font-size:0.75rem;margin-left:auto;font-weight:bold;cursor:pointer;border:none;white-space:nowrap}
-    .badge:hover{background:#27ae60}
-    .container{max-width:860px;margin:0 auto;padding:20px 14px}
+    header .sub{font-size:0.73rem;color:#aaa}
+    .hbtn{background:#2ecc71;color:#111;padding:5px 13px;border-radius:20px;font-size:0.74rem;margin-left:auto;font-weight:bold;cursor:pointer;border:none;white-space:nowrap}
+    .hbtn:hover{background:#27ae60}
+    .container{max-width:900px;margin:0 auto;padding:20px 14px}
     .btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:0.82rem;font-weight:bold;transition:all .2s}
-    .btn-green{background:#2ecc71;color:#111}.btn-green:hover{background:#27ae60}
-    .btn-outline{background:transparent;color:#2ecc71;border:1px solid #2ecc71}.btn-outline:hover{background:#2ecc71;color:#111}
-    .btn-red{background:#e74c3c;color:#fff}.btn-red:hover{background:#c0392b}
+    .btn-g{background:#2ecc71;color:#111}.btn-g:hover{background:#27ae60}
+    .btn-o{background:transparent;color:#2ecc71;border:1px solid #2ecc71}.btn-o:hover{background:#2ecc71;color:#111}
+    .btn-r{background:#e74c3c;color:#fff}.btn-r:hover{background:#c0392b}
     .btn-sm{padding:4px 10px;font-size:0.73rem}
-    .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center;padding:16px}
+    .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:500;align-items:center;justify-content:center;padding:14px}
     .modal-bg.open{display:flex}
-    .modal{background:#16213e;border-radius:14px;padding:22px;width:100%;max-width:540px;border:1px solid #2ecc71;max-height:90vh;overflow-y:auto}
+    .modal{background:#16213e;border-radius:14px;padding:22px;width:100%;max-width:560px;border:1px solid #2ecc71;max-height:92vh;overflow-y:auto}
     .modal h2{font-size:1.05rem;color:#2ecc71;margin-bottom:14px}
     label{font-size:0.78rem;color:#aaa;display:block;margin:10px 0 3px}
     input,textarea,select{width:100%;background:#0f3460;border:1px solid #333;border-radius:7px;padding:8px 11px;color:#eee;font-size:0.82rem;outline:none}
     input:focus,textarea:focus{border-color:#2ecc71}
-    .dates-list .date-row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
-    .dates-list .date-row input{flex:1}
-    .add-date-btn{margin-top:6px;font-size:0.76rem;color:#2ecc71;background:none;border:1px dashed #2ecc71;border-radius:6px;padding:4px 10px;cursor:pointer;width:100%}
+    .row2{display:flex;gap:8px}
+    .row2>*{flex:1}
+    .date-row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+    .date-row input{flex:1}
+    .add-date-btn{margin-top:6px;font-size:0.76rem;color:#2ecc71;background:none;border:1px dashed #2ecc71;border-radius:6px;padding:5px 10px;cursor:pointer;width:100%}
     .form-actions{display:flex;gap:8px;margin-top:18px;justify-content:flex-end}
-    .event-card{background:#16213e;border-radius:12px;border-left:4px solid #2ecc71;margin-bottom:14px;overflow:hidden}
+
+    /* EVENT CARD */
+    .event-card{background:#16213e;border-radius:12px;border-left:4px solid #2ecc71;margin-bottom:16px;overflow:hidden}
     .event-header{padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:10px}
     .event-emoji{font-size:1.9em;flex-shrink:0}
     .event-info{flex:1;min-width:0}
-    .event-title{font-size:0.98rem;font-weight:bold;color:#fff}
+    .event-title{font-size:1rem;font-weight:bold;color:#fff}
     .event-meta{font-size:0.72rem;color:#888;margin-top:2px}
     .event-btns{display:flex;gap:6px;flex-shrink:0}
-    .event-body{display:none;padding:0 14px 14px}
+    .event-body{display:none;padding:0 14px 16px}
     .event-body.open{display:block}
-    .event-desc{font-size:0.8rem;color:#bbb;margin-bottom:10px;background:#0f3460;padding:9px;border-radius:7px;line-height:1.5}
-    .date-slot{background:#0f3460;border-radius:8px;padding:10px 12px;margin-bottom:8px}
-    .date-slot-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-    .date-label{font-size:0.83rem;font-weight:bold;color:#2ecc71;flex:1}
-    .reg-count{font-size:0.72rem;color:#888}
-    .prog{height:4px;background:#1a1a2e;border-radius:2px;margin:4px 0 8px}
-    .prog-fill{height:100%;background:#2ecc71;border-radius:2px;transition:width .3s}
-    .reg-item{display:flex;align-items:center;gap:6px;font-size:0.76rem;color:#ccc;padding:3px 0;border-bottom:1px solid #1a1a2e}
-    .reg-item:last-child{border-bottom:none}
-    .reg-del{background:none;border:none;color:#e74c3c;cursor:pointer;font-size:0.8rem;padding:1px 4px}
-    .cal-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+    .event-desc{font-size:0.8rem;color:#bbb;margin-bottom:12px;background:#0f3460;padding:9px;border-radius:7px;line-height:1.5}
+
+    /* SHARE */
+    .share-box{background:#0f3460;border-radius:8px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+    .share-url{font-size:0.72rem;color:#2ecc71;flex:1;word-break:break-all}
+    .share-copy{font-size:0.72rem;background:#2ecc71;color:#111;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-weight:bold;white-space:nowrap}
+
+    /* TABLEAU DOODLE */
+    .doodle-wrap{overflow-x:auto;margin-bottom:10px}
+    .doodle-table{border-collapse:collapse;width:100%;min-width:400px}
+    .doodle-table th{background:#0f3460;color:#2ecc71;font-size:0.75rem;padding:7px 10px;text-align:center;border:1px solid #1a1a2e;white-space:nowrap}
+    .doodle-table th.name-col{text-align:left;min-width:120px}
+    .doodle-table td{border:1px solid #1a1a2e;padding:6px 8px;text-align:center;font-size:0.78rem;vertical-align:middle}
+    .doodle-table td.name-col{text-align:left;color:#ccc}
+    .doodle-table tr:nth-child(even){background:rgba(15,52,96,.3)}
+    .cell-yes{color:#2ecc71;font-size:1.1em}
+    .cell-no{color:#e74c3c;font-size:1.1em}
+    .cell-maybe{color:#f39c12;font-size:1.1em}
+    .totals td{background:#0f3460;font-weight:bold;font-size:0.78rem;color:#2ecc71}
+    .totals td.name-col{color:#888}
+    .sleep-badge{font-size:0.65rem;padding:1px 5px;border-radius:8px;margin-left:4px}
+    .sleep-yes{background:#1a6b3a;color:#2ecc71}
+    .sleep-no{background:#2c1a1a;color:#e74c3c}
+
+    /* RÉPONDRE */
+    .respond-section{margin-top:12px}
+    .respond-section h4{font-size:0.85rem;color:#2ecc71;margin-bottom:8px}
+    .date-response-row{background:#0f3460;border-radius:8px;padding:10px;margin-bottom:7px}
+    .date-response-label{font-size:0.82rem;color:#eee;font-weight:bold;margin-bottom:6px}
+    .response-btns{display:flex;gap:6px;flex-wrap:wrap}
+    .rbtn{padding:5px 12px;border-radius:6px;border:2px solid transparent;cursor:pointer;font-size:0.78rem;font-weight:bold;background:#1a1a2e;color:#888;transition:all .2s}
+    .rbtn.yes{border-color:#2ecc71;color:#2ecc71}.rbtn.yes.sel{background:#2ecc71;color:#111}
+    .rbtn.no{border-color:#e74c3c;color:#e74c3c}.rbtn.no.sel{background:#e74c3c;color:#fff}
+    .rbtn.maybe{border-color:#f39c12;color:#f39c12}.rbtn.maybe.sel{background:#f39c12;color:#111}
+    .sleep-row{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:0.78rem;color:#aaa}
+    .sleep-row input[type=checkbox]{width:auto;accent-color:#2ecc71}
+    .nb-row{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:0.78rem;color:#aaa}
+    .nb-row input[type=number]{width:70px}
+
+    /* CAL */
+    .cal-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
     .cal-btn{font-size:0.7rem;padding:3px 9px;border-radius:6px;border:1px solid #3498db;color:#3498db;background:none;cursor:pointer;text-decoration:none;display:inline-block}
     .cal-btn:hover{background:#3498db;color:#fff}
-    .cal-ics{border-color:#9b59b6;color:#9b59b6}
-    .cal-ics:hover{background:#9b59b6;color:#fff}
-    .register-btn{margin-top:10px}
-    .date-checkboxes .date-check{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.82rem}
-    .date-check input[type=checkbox]{width:auto;accent-color:#2ecc71}
+    .cal-ics{border-color:#9b59b6;color:#9b59b6}.cal-ics:hover{background:#9b59b6;color:#fff}
+
     .empty{text-align:center;padding:60px 20px;color:#555}
     .empty .big{font-size:3em;margin-bottom:12px}
     .admin-bar{background:#0f3460;padding:8px 20px;font-size:0.76rem;color:#888;display:flex;align-items:center;gap:10px;border-bottom:1px solid #333}
     .admin-bar span{color:#2ecc71}
-    .toast{position:fixed;bottom:20px;right:20px;background:#2ecc71;color:#111;padding:10px 18px;border-radius:10px;font-size:0.83rem;font-weight:bold;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:280px}
+    .toast{position:fixed;bottom:20px;right:20px;background:#2ecc71;color:#111;padding:10px 18px;border-radius:10px;font-size:0.82rem;font-weight:bold;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:280px}
     .toast.show{opacity:1}
     .loading{text-align:center;padding:40px;color:#888;font-size:0.85rem}
-    .spinner{display:inline-block;width:22px;height:22px;border:3px solid #333;border-top-color:#2ecc71;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle}
+    .spinner{display:inline-block;width:20px;height:20px;border:3px solid #333;border-top-color:#2ecc71;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle}
     @keyframes spin{to{transform:rotate(360deg)}}
-    .config-box{background:#0f3460;border-radius:8px;padding:12px;margin-bottom:16px;font-size:0.78rem;color:#888;border:1px solid #333}
-    .config-box strong{color:#f39c12}
     @media(max-width:480px){.event-btns{flex-direction:column}.event-header{flex-wrap:wrap}}
   </style>
 </head>
@@ -76,18 +105,18 @@
   <div style="font-size:1.8em">🎉</div>
   <div>
     <h1>Jura Events</h1>
-    <div class="sub">Inscriptions partagées en ligne</div>
+    <div class="sub">Doodle & inscriptions</div>
   </div>
-  <button class="badge" onclick="toggleAdmin()">⚙️ Admin</button>
+  <button class="hbtn" onclick="toggleAdmin()">⚙️ Admin</button>
 </header>
 
 <div id="admin-bar" class="admin-bar" style="display:none">
-  ⚙️ Mode admin — <span>Vous pouvez créer et gérer les événements</span>
-  <button class="btn btn-sm btn-green" onclick="openCreate()" style="margin-left:auto">+ Nouvel événement</button>
+  ⚙️ Mode admin — <span>Créer et gérer les événements</span>
+  <button class="btn btn-sm btn-g" onclick="openCreate()" style="margin-left:auto">+ Nouvel événement</button>
 </div>
 
 <div class="container">
-  <div id="loading" class="loading"><span class="spinner"></span>Chargement des événements…</div>
+  <div id="loading" class="loading"><span class="spinner"></span>Chargement…</div>
   <div id="events-list" style="display:none"></div>
   <div id="empty" class="empty" style="display:none">
     <div class="big">📅</div>
@@ -100,32 +129,37 @@
 <div id="modal-event" class="modal-bg">
   <div class="modal">
     <h2 id="modal-title">✨ Nouvel événement</h2>
-    <label>Emoji</label><input id="f-emoji" maxlength="4" value="🎉" style="width:70px">
-    <label>Titre *</label><input id="f-title" placeholder="Ex: Apéro au lac">
-    <label>Description</label><textarea id="f-desc" rows="2" placeholder="Infos sur l'événement…"></textarea>
-    <label>Lieu</label><input id="f-location" placeholder="Ex: Morez, Jura">
+    <div class="row2">
+      <div><label>Emoji</label><input id="f-emoji" maxlength="4" value="🎉" style="width:70px"></div>
+      <div><label>Titre *</label><input id="f-title" placeholder="Ex: Week-end au chalet"></div>
+    </div>
+    <label>Description</label><textarea id="f-desc" rows="2" placeholder="Infos, programme, détails…"></textarea>
+    <label>Lieu</label><input id="f-location" placeholder="Ex: Chalet des Bellins, Morez">
+    <label>Capacité max sur place (nuitées)</label><input id="f-capacity" type="number" min="0" placeholder="Ex: 12 (0 = illimité)" style="width:160px">
     <label>Dates proposées *</label>
     <div class="dates-list" id="dates-list"></div>
-    <button class="add-date-btn" onclick="addDateRow()">+ Ajouter une date</button>
+    <button class="add-date-btn" onclick="addDateRow()">+ Ajouter une date / période</button>
     <div class="form-actions">
-      <button class="btn btn-outline" onclick="closeModal('modal-event')">Annuler</button>
-      <button class="btn btn-green" onclick="saveEvent()">💾 Enregistrer</button>
+      <button class="btn btn-o" onclick="closeModal('modal-event')">Annuler</button>
+      <button class="btn btn-g" onclick="saveEvent()">💾 Enregistrer</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL REGISTER -->
-<div id="modal-register" class="modal-bg">
+<!-- MODAL RÉPONDRE -->
+<div id="modal-respond" class="modal-bg">
   <div class="modal">
-    <h2>✋ S'inscrire</h2>
-    <label>Prénom *</label><input id="r-first" placeholder="Jean">
-    <label>Nom *</label><input id="r-last" placeholder="Dupont">
+    <h2>✋ Je réponds</h2>
+    <div class="row2">
+      <div><label>Prénom *</label><input id="r-first" placeholder="Jean"></div>
+      <div><label>Nom *</label><input id="r-last" placeholder="Dupont"></div>
+    </div>
+    <label>Famille / Groupe</label><input id="r-family" placeholder="Ex: Famille Dupont, Les Chevalier…">
     <label>Email (optionnel)</label><input id="r-email" type="email" placeholder="jean@exemple.com">
-    <label>Date(s) *</label>
-    <div class="date-checkboxes" id="r-dates"></div>
+    <div id="r-dates-section"></div>
     <div class="form-actions">
-      <button class="btn btn-outline" onclick="closeModal('modal-register')">Annuler</button>
-      <button class="btn btn-green" onclick="submitReg()">✅ S'inscrire</button>
+      <button class="btn btn-o" onclick="closeModal('modal-respond')">Annuler</button>
+      <button class="btn btn-g" onclick="submitResponse()">✅ Envoyer ma réponse</button>
     </div>
   </div>
 </div>
@@ -135,11 +169,11 @@
   <div class="modal">
     <h2>🔑 Accès administrateur</h2>
     <label>Mot de passe</label>
-    <input type="password" id="admin-pw" placeholder="Entrez le mot de passe" onkeydown="if(event.key==='Enter')checkAdmin()">
-    <div style="font-size:0.73rem;color:#666;margin-top:5px">Par défaut : <code style="color:#2ecc71">jura2026</code></div>
+    <input type="password" id="admin-pw" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')checkAdmin()">
+    <div style="font-size:0.72rem;color:#666;margin-top:5px">Par défaut : <code style="color:#2ecc71">jura2026</code></div>
     <div class="form-actions">
-      <button class="btn btn-outline" onclick="closeModal('modal-admin')">Annuler</button>
-      <button class="btn btn-green" onclick="checkAdmin()">Entrer</button>
+      <button class="btn btn-o" onclick="closeModal('modal-admin')">Annuler</button>
+      <button class="btn btn-g" onclick="checkAdmin()">Entrer</button>
     </div>
   </div>
 </div>
@@ -147,273 +181,285 @@
 <div id="toast" class="toast"></div>
 
 <script>
-// ── CONFIG ────────────────────────────────────────────────
 const ADMIN_PW = 'jura2026';
 const BLOB_BASE = 'https://jsonblob.com/api/jsonBlob';
 const BLOB_ID_KEY = 'jura_blob_id';
+let isAdmin = false, editingId = null, respondEventId = null;
+let appData = {events:[]};
+// Temporary state for response form
+let responseState = {};
 
-// Crée un nouveau blob si pas d'ID stocké
+// ── STORAGE ───────────────────────────────────────────────
 async function getBlobId() {
   let id = localStorage.getItem(BLOB_ID_KEY);
   if (id) return id;
-  // Premier lancement : créer un blob partagé
   const res = await fetch(BLOB_BASE, {
-    method: 'POST',
-    headers: {'Content-Type':'application/json','Accept':'application/json'},
-    body: JSON.stringify({events:[], createdAt: Date.now()})
+    method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body: JSON.stringify({events:[], createdAt:Date.now()})
   });
-  const loc = res.headers.get('location') || res.headers.get('Location');
-  const newId = loc ? loc.split('/').pop() : null;
-  if (newId) {
-    localStorage.setItem(BLOB_ID_KEY, newId);
-    return newId;
-  }
-  throw new Error('Impossible de créer le blob de données');
+  const loc = res.headers.get('location')||res.headers.get('Location')||'';
+  const newId = loc.split('/').pop();
+  if (newId) { localStorage.setItem(BLOB_ID_KEY, newId); return newId; }
+  throw new Error('Impossible de créer le stockage en ligne');
 }
-
 async function loadData() {
   const id = await getBlobId();
-  const res = await fetch(`${BLOB_BASE}/${id}`, {headers:{Accept:'application/json'}});
+  const res = await fetch(`${BLOB_BASE}/${id}`,{headers:{Accept:'application/json'}});
   return res.json();
 }
-
 async function saveData(data) {
   const id = await getBlobId();
-  await fetch(`${BLOB_BASE}/${id}`, {
-    method: 'PUT',
-    headers: {'Content-Type':'application/json','Accept':'application/json'},
-    body: JSON.stringify(data)
-  });
+  await fetch(`${BLOB_BASE}/${id}`,{method:'PUT',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)});
 }
-
-// ── STATE ─────────────────────────────────────────────────
-let isAdmin = false;
-let editingId = null;
-let registerEventId = null;
-let appData = {events: []};
 
 // ── UTILS ─────────────────────────────────────────────────
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
+function uid() { return Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
 function toast(msg, err=false) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.style.background = err ? '#e74c3c' : '#2ecc71';
-  el.style.color = err ? '#fff' : '#111';
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2800);
+  el.textContent = msg; el.style.background = err?'#e74c3c':'#2ecc71'; el.style.color = err?'#fff':'#111';
+  el.classList.add('show'); setTimeout(()=>el.classList.remove('show'), 2800);
 }
-
-function formatDate(date, time) {
+function fmtDate(date, time) {
   if (!date) return '?';
-  const d = new Date(date + 'T00:00');
-  const label = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'long'});
-  return label + (time ? ' à ' + time : '');
+  const d = new Date(date+'T00:00');
+  return d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'}) + (time?' '+time:'');
 }
-
-function googleCalUrl(title, date, time, location) {
-  const dt = date.replace(/-/g,'');
-  const t = (time||'').replace(':','');
-  const start = t ? `${dt}T${t}00` : dt;
-  const end = t ? `${dt}T${String(parseInt(t.slice(0,2))+2).padStart(2,'0')}${t.slice(2)}00` : dt;
-  return 'https://calendar.google.com/calendar/render?' + new URLSearchParams({
-    action:'TEMPLATE', text:title,
-    dates: start+'/'+end,
-    location: location||''
-  });
-}
-
-function downloadICS(title, date, time, location) {
-  const d = new Date(date+'T'+(time||'00:00')+':00');
-  const fmt = x => x.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
-  const end = new Date(d); end.setHours(end.getHours()+2);
-  const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nDTSTART:${fmt(d)}\nDTEND:${fmt(end)}\nSUMMARY:${title}\nLOCATION:${location||''}\nEND:VEVENT\nEND:VCALENDAR`;
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
-  a.download = title.replace(/\s+/g,'-')+'.ics';
-  a.click();
-}
-
-// ── MODAL ─────────────────────────────────────────────────
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
 // ── ADMIN ─────────────────────────────────────────────────
 function toggleAdmin() {
-  if (isAdmin) { isAdmin = false; document.getElementById('admin-bar').style.display='none'; render(); return; }
-  document.getElementById('admin-pw').value = '';
-  openModal('modal-admin');
+  if (isAdmin) { isAdmin=false; document.getElementById('admin-bar').style.display='none'; render(); return; }
+  document.getElementById('admin-pw').value=''; openModal('modal-admin');
 }
 function checkAdmin() {
-  if (document.getElementById('admin-pw').value === ADMIN_PW) {
-    isAdmin = true; closeModal('modal-admin');
-    document.getElementById('admin-bar').style.display = 'flex';
+  if (document.getElementById('admin-pw').value===ADMIN_PW) {
+    isAdmin=true; closeModal('modal-admin');
+    document.getElementById('admin-bar').style.display='flex';
     toast('✅ Mode admin activé !'); render();
   } else {
-    document.getElementById('admin-pw').style.borderColor = '#e74c3c';
-    setTimeout(() => document.getElementById('admin-pw').style.borderColor='#333', 1500);
+    document.getElementById('admin-pw').style.borderColor='#e74c3c';
+    setTimeout(()=>document.getElementById('admin-pw').style.borderColor='#333',1500);
   }
 }
 
-// ── CREATE / EDIT ─────────────────────────────────────────
+// ── CREATE ────────────────────────────────────────────────
 function openCreate(evId=null) {
-  editingId = evId;
-  document.getElementById('modal-title').textContent = evId ? '✏️ Modifier' : '✨ Nouvel événement';
-  document.getElementById('dates-list').innerHTML = '';
+  editingId=evId;
+  document.getElementById('modal-title').textContent = evId?'✏️ Modifier l\'événement':'✨ Nouvel événement';
+  document.getElementById('dates-list').innerHTML='';
   if (evId) {
-    const ev = appData.events.find(e=>e.id===evId);
+    const ev=appData.events.find(e=>e.id===evId);
     if (ev) {
-      document.getElementById('f-emoji').value = ev.emoji||'🎉';
-      document.getElementById('f-title').value = ev.title;
-      document.getElementById('f-desc').value = ev.desc||'';
-      document.getElementById('f-location').value = ev.location||'';
-      (ev.dates||[]).forEach(d => addDateRow(d.date,d.time,d.max));
+      document.getElementById('f-emoji').value=ev.emoji||'🎉';
+      document.getElementById('f-title').value=ev.title;
+      document.getElementById('f-desc').value=ev.desc||'';
+      document.getElementById('f-location').value=ev.location||'';
+      document.getElementById('f-capacity').value=ev.capacity||0;
+      (ev.dates||[]).forEach(d=>addDateRow(d.date,d.dateEnd,d.time));
     }
   } else {
     document.getElementById('f-emoji').value='🎉';
-    document.getElementById('f-title').value='';
-    document.getElementById('f-desc').value='';
-    document.getElementById('f-location').value='';
+    ['f-title','f-desc','f-location'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('f-capacity').value='';
     addDateRow();
   }
   openModal('modal-event');
 }
 
-function addDateRow(date='',time='',max='') {
-  const row = document.createElement('div');
-  row.className = 'date-row';
-  row.innerHTML = `<input type="date" value="${date}"><input type="time" value="${time}" style="width:110px"><input type="number" value="${max||''}" placeholder="Max" style="width:75px" min="1"><button class="btn btn-red btn-sm" onclick="this.parentElement.remove()">✕</button>`;
+function addDateRow(date='',dateEnd='',time='') {
+  const row=document.createElement('div'); row.className='date-row';
+  row.innerHTML=`<input type="date" value="${date}" title="Date début"><input type="date" value="${dateEnd}" title="Date fin (optionnel)" style="width:140px"><input type="time" value="${time}" style="width:100px"><button class="btn btn-r btn-sm" onclick="this.parentElement.remove()">✕</button>`;
   document.getElementById('dates-list').appendChild(row);
 }
 
 async function saveEvent() {
-  const title = document.getElementById('f-title').value.trim();
-  if (!title) { toast('⚠️ Titre obligatoire', true); return; }
-  const rows = document.querySelectorAll('#dates-list .date-row');
-  const dates = [];
-  rows.forEach(row => {
-    const [d,t,m] = row.querySelectorAll('input');
-    if (d.value) dates.push({id:uid(), date:d.value, time:t.value, max:parseInt(m.value)||0, registrations:[]});
+  const title=document.getElementById('f-title').value.trim();
+  if (!title) { toast('⚠️ Titre obligatoire',true); return; }
+  const dates=[];
+  document.querySelectorAll('#dates-list .date-row').forEach(row=>{
+    const [d,de,t]=row.querySelectorAll('input');
+    if (d.value) dates.push({id:uid(),date:d.value,dateEnd:de.value,time:t.value,responses:[]});
   });
-  if (!dates.length) { toast('⚠️ Ajoutez au moins une date', true); return; }
-
+  if (!dates.length) { toast('⚠️ Ajoutez au moins une date',true); return; }
   if (editingId) {
-    const idx = appData.events.findIndex(e=>e.id===editingId);
+    const idx=appData.events.findIndex(e=>e.id===editingId);
     if (idx>=0) {
-      const existing = appData.events[idx].dates||[];
-      dates.forEach(d => { const prev=existing.find(e=>e.date===d.date&&e.time===d.time); if(prev) d.registrations=prev.registrations; });
-      appData.events[idx] = {...appData.events[idx], emoji:document.getElementById('f-emoji').value||'🎉', title, desc:document.getElementById('f-desc').value, location:document.getElementById('f-location').value, dates};
+      const existing=appData.events[idx].dates||[];
+      dates.forEach(d=>{ const p=existing.find(e=>e.date===d.date); if(p) d.responses=p.responses; });
+      appData.events[idx]={...appData.events[idx],emoji:document.getElementById('f-emoji').value||'🎉',title,desc:document.getElementById('f-desc').value,location:document.getElementById('f-location').value,capacity:parseInt(document.getElementById('f-capacity').value)||0,dates};
     }
   } else {
-    appData.events.push({id:uid(), emoji:document.getElementById('f-emoji').value||'🎉', title, desc:document.getElementById('f-desc').value, location:document.getElementById('f-location').value, dates, createdAt:Date.now()});
+    appData.events.push({id:uid(),emoji:document.getElementById('f-emoji').value||'🎉',title,desc:document.getElementById('f-desc').value,location:document.getElementById('f-location').value,capacity:parseInt(document.getElementById('f-capacity').value)||0,dates,createdAt:Date.now()});
   }
-  closeModal('modal-event');
-  toast('💾 Sauvegarde…');
-  await saveData(appData);
-  render();
-  toast(editingId ? '✅ Mis à jour !' : '🎉 Événement créé !');
+  closeModal('modal-event'); toast('💾 Sauvegarde…');
+  await saveData(appData); render(); toast(editingId?'✅ Mis à jour !':'🎉 Événement créé !');
 }
 
 async function deleteEvent(id) {
   if (!confirm('Supprimer cet événement ?')) return;
-  appData.events = appData.events.filter(e=>e.id!==id);
-  await saveData(appData);
-  render();
-  toast('🗑️ Supprimé');
+  appData.events=appData.events.filter(e=>e.id!==id);
+  await saveData(appData); render(); toast('🗑️ Supprimé');
 }
 
-function toggleBody(id) {
-  document.getElementById('body-'+id).classList.toggle('open');
-}
-
-// ── REGISTER ─────────────────────────────────────────────
-function openRegister(evId) {
-  registerEventId = evId;
-  const ev = appData.events.find(e=>e.id===evId);
+// ── RESPOND ───────────────────────────────────────────────
+function openRespond(evId) {
+  respondEventId=evId;
+  responseState={};
+  const ev=appData.events.find(e=>e.id===evId);
   if (!ev) return;
-  document.getElementById('r-first').value='';
-  document.getElementById('r-last').value='';
-  document.getElementById('r-email').value='';
-  const cont = document.getElementById('r-dates');
-  cont.innerHTML = ev.dates.map(d => {
-    const full = d.max && d.registrations.length >= d.max;
-    return `<div class="date-check"><input type="checkbox" id="dc-${d.id}" value="${d.id}" ${full?'disabled':''}><label for="dc-${d.id}" style="color:${full?'#555':'#eee'}">${formatDate(d.date,d.time)} — ${d.registrations.length}${d.max?'/'+d.max:''} inscrits${full?' <span style="color:#e74c3c">(complet)</span>':''}</label></div>`;
-  }).join('');
-  openModal('modal-register');
+  ['r-first','r-last','r-family','r-email'].forEach(id=>document.getElementById(id).value='');
+  const sec=document.getElementById('r-dates-section');
+  sec.innerHTML='<div style="margin-top:14px;font-size:0.82rem;color:#2ecc71;font-weight:bold;margin-bottom:8px">📅 Tes disponibilités par date</div>';
+  ev.dates.forEach(d=>{
+    responseState[d.id]={avail:'',sleep:false,nb:1};
+    const label=d.dateEnd?`${fmtDate(d.date,d.time)} → ${fmtDate(d.dateEnd)}`:`${fmtDate(d.date,d.time)}`;
+    sec.innerHTML+=`<div class="date-response-row" id="drr-${d.id}">
+      <div class="date-response-label">📅 ${label}</div>
+      <div class="response-btns">
+        <button class="rbtn yes" onclick="setAvail('${d.id}','yes',this)">✅ Présent</button>
+        <button class="rbtn maybe" onclick="setAvail('${d.id}','maybe',this)">🤔 Peut-être</button>
+        <button class="rbtn no" onclick="setAvail('${d.id}','no',this)">❌ Absent</button>
+      </div>
+      <div class="nb-row">
+        👥 Nombre de personnes (famille) :
+        <input type="number" min="1" max="20" value="1" id="nb-${d.id}" style="width:70px" onchange="responseState['${d.id}'].nb=parseInt(this.value)||1">
+      </div>
+      <div class="sleep-row">
+        <input type="checkbox" id="sleep-${d.id}" onchange="responseState['${d.id}'].sleep=this.checked">
+        <label for="sleep-${d.id}">🛏️ Je dors sur place</label>
+      </div>
+    </div>`;
+  });
+  openModal('modal-respond');
 }
 
-async function submitReg() {
-  const fn = document.getElementById('r-first').value.trim();
-  const ln = document.getElementById('r-last').value.trim();
-  const email = document.getElementById('r-email').value.trim();
-  if (!fn||!ln) { toast('⚠️ Prénom et nom obligatoires', true); return; }
-  const checked = [...document.querySelectorAll('#r-dates input:checked')].map(i=>i.value);
-  if (!checked.length) { toast('⚠️ Choisissez au moins une date', true); return; }
-  const ev = appData.events.find(e=>e.id===registerEventId);
+function setAvail(dateId, val, btn) {
+  responseState[dateId].avail=val;
+  const row=document.getElementById('drr-'+dateId);
+  row.querySelectorAll('.rbtn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
+async function submitResponse() {
+  const fn=document.getElementById('r-first').value.trim();
+  const ln=document.getElementById('r-last').value.trim();
+  if (!fn||!ln) { toast('⚠️ Prénom et nom obligatoires',true); return; }
+  const hasAny = Object.values(responseState).some(r=>r.avail!=='');
+  if (!hasAny) { toast('⚠️ Réponds à au moins une date',true); return; }
+  const ev=appData.events.find(e=>e.id===respondEventId);
   if (!ev) return;
-  checked.forEach(dateId => {
-    const d = ev.dates.find(x=>x.id===dateId);
-    if (d && !(d.max && d.registrations.length >= d.max)) {
-      d.registrations.push({id:uid(), name:fn+' '+ln, email, at:Date.now()});
+  const name=fn+' '+ln;
+  const family=document.getElementById('r-family').value.trim()||name;
+  const email=document.getElementById('r-email').value.trim();
+  // Remove previous response from same person
+  ev.dates.forEach(d=>{ d.responses=d.responses.filter(r=>r.name.toLowerCase()!==name.toLowerCase()); });
+  // Add new responses
+  ev.dates.forEach(d=>{
+    const rs=responseState[d.id];
+    if (rs && rs.avail) {
+      d.responses.push({id:uid(), name, family, email, avail:rs.avail, sleep:rs.sleep, nb:rs.nb||1, at:Date.now()});
     }
   });
-  closeModal('modal-register');
-  toast('💾 Inscription en cours…');
-  await saveData(appData);
-  render();
-  toast(`✅ ${fn}, vous êtes inscrit(e) !`);
+  closeModal('modal-respond'); toast('💾 Envoi…');
+  await saveData(appData); render(); toast(`✅ ${fn}, ta réponse est enregistrée !`);
 }
 
-async function deleteReg(evId, dateId, regId) {
-  const ev = appData.events.find(e=>e.id===evId);
-  if (!ev) return;
-  const d = ev.dates.find(x=>x.id===dateId);
-  if (d) d.registrations = d.registrations.filter(r=>r.id!==regId);
-  await saveData(appData);
-  render();
-  toast('🗑️ Inscription supprimée');
+async function deleteResponse(evId, dateId, respId) {
+  const ev=appData.events.find(e=>e.id===evId);
+  const d=ev?.dates?.find(x=>x.id===dateId);
+  if (d) d.responses=d.responses.filter(r=>r.id!==respId);
+  await saveData(appData); render(); toast('🗑️ Réponse supprimée');
+}
+
+function toggleBody(id) { document.getElementById('body-'+id).classList.toggle('open'); }
+
+function copyUrl(url) {
+  navigator.clipboard.writeText(url).then(()=>toast('🔗 Lien copié !')).catch(()=>toast('Copie manuelle : '+url));
+}
+
+// ── CALENDAR ──────────────────────────────────────────────
+function gcalUrl(title,date,time,location) {
+  const dt=date.replace(/-/g,''), t=(time||'').replace(':','');
+  const s=t?`${dt}T${t}00`:dt, e=t?`${dt}T${String(parseInt(t.slice(0,2))+2).padStart(2,'0')}${t.slice(2)}00`:dt;
+  return 'https://calendar.google.com/calendar/render?'+new URLSearchParams({action:'TEMPLATE',text:title,dates:s+'/'+e,location:location||''});
+}
+function dlICS(title,date,time,location) {
+  const d=new Date(date+'T'+(time||'00:00')+':00'), e2=new Date(d); e2.setHours(e2.getHours()+2);
+  const fmt=x=>x.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  const ics=`BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nDTSTART:${fmt(d)}\nDTEND:${fmt(e2)}\nSUMMARY:${title}\nLOCATION:${location||''}\nEND:VEVENT\nEND:VCALENDAR`;
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
+  a.download=title.replace(/\s+/g,'-')+'.ics'; a.click();
 }
 
 // ── RENDER ────────────────────────────────────────────────
 function render() {
-  const list = document.getElementById('events-list');
-  const empty = document.getElementById('empty');
-  document.getElementById('loading').style.display = 'none';
-  if (!appData.events.length) {
-    list.style.display = 'none'; empty.style.display = 'block'; return;
-  }
-  empty.style.display = 'none'; list.style.display = 'block';
-  list.innerHTML = appData.events.map(ev => {
-    const total = ev.dates.reduce((s,d)=>s+d.registrations.length, 0);
-    const datesHtml = ev.dates.map(d => {
-      const pct = d.max ? Math.min(100, Math.round(d.registrations.length/d.max*100)) : 0;
-      const regsHtml = d.registrations.length
-        ? d.registrations.map(r=>`<div class="reg-item"><span style="flex:1">👤 ${r.name}</span><span style="color:#888;font-size:0.7rem">${r.email||''}</span>${isAdmin?`<button class="reg-del" onclick="deleteReg('${ev.id}','${d.id}','${r.id}')">✕</button>`:''}</div>`).join('')
-        : '<div style="font-size:0.73rem;color:#555;padding:3px 0">Aucune inscription</div>';
-      return `<div class="date-slot">
-        <div class="date-slot-head"><span class="date-label">📅 ${formatDate(d.date,d.time)}</span><span class="reg-count">${d.registrations.length}${d.max?'/'+d.max:''} inscrits</span></div>
-        ${d.max?`<div class="prog"><div class="prog-fill" style="width:${pct}%"></div></div>`:''}
-        ${regsHtml}
-        <div class="cal-row">
-          <a class="cal-btn" href="${googleCalUrl(ev.title,d.date,d.time,ev.location)}" target="_blank">📅 Google Cal</a>
-          <button class="cal-btn cal-ics" onclick="downloadICS('${ev.title.replace(/'/g,"\\'")}','${d.date}','${d.time||''}','${(ev.location||'').replace(/'/g,"\\'")}')">📥 .ics</button>
-        </div>
-      </div>`;
+  const list=document.getElementById('events-list'), empty=document.getElementById('empty');
+  document.getElementById('loading').style.display='none';
+  if (!appData.events.length) { list.style.display='none'; empty.style.display='block'; return; }
+  empty.style.display='none'; list.style.display='block';
+  const pageUrl=window.location.href.split('?')[0];
+  list.innerHTML=appData.events.map(ev=>{
+    // Résumé participants par date
+    const datesHtml=ev.dates.map(d=>{
+      const yes=d.responses.filter(r=>r.avail==='yes');
+      const maybe=d.responses.filter(r=>r.avail==='maybe');
+      const no=d.responses.filter(r=>r.avail==='no');
+      const totalPeople=yes.reduce((s,r)=>s+r.nb,0)+maybe.reduce((s,r)=>s+r.nb,0);
+      const sleeping=yes.filter(r=>r.sleep).length+maybe.filter(r=>r.sleep).length;
+      const label=d.dateEnd?`${fmtDate(d.date,d.time)} → ${fmtDate(d.dateEnd)}`:`${fmtDate(d.date,d.time)}`;
+      return {d,yes,maybe,no,totalPeople,sleeping,label};
+    });
+    // Toutes les personnes uniques
+    const allNames=[...new Set(ev.dates.flatMap(d=>d.responses.map(r=>r.name)))];
+    // Tableau doodle
+    const tableHead=`<tr><th class="name-col">Participant</th>${ev.dates.map((d,i)=>{
+      const info=datesHtml[i];
+      return `<th>${info.label}<br><span style="font-size:0.65rem;color:#aaa">${info.yes.length}✅ ${info.maybe.length}🤔 ${info.no.length}❌</span></th>`;
+    }).join('')}<th>👥 Total</th></tr>`;
+    const tableRows=allNames.map(name=>{
+      const cells=ev.dates.map(d=>{
+        const r=d.responses.find(x=>x.name===name);
+        if (!r) return '<td>—</td>';
+        const icon=r.avail==='yes'?'<span class="cell-yes">✅</span>':r.avail==='maybe'?'<span class="cell-maybe">🤔</span>':'<span class="cell-no">❌</span>';
+        const nb=r.nb>1?`<span style="font-size:0.7rem;color:#aaa"> ×${r.nb}</span>`:'';
+        const sleep=r.sleep?`<span class="sleep-badge sleep-yes">🛏️</span>`:'';
+        const del=isAdmin?`<button class="reg-del" onclick="deleteResponse('${ev.id}','${d.id}','${r.id}')" style="background:none;border:none;color:#e74c3c;cursor:pointer;font-size:0.75rem">✕</button>`:'';
+        return `<td>${icon}${nb}${sleep}${del}</td>`;
+      }).join('');
+      const firstResp=ev.dates.flatMap(d=>d.responses).find(r=>r.name===name);
+      const nbTotal=ev.dates.reduce((s,d)=>{const r=d.responses.find(x=>x.name===name&&x.avail==='yes');return s+(r?r.nb:0);},0);
+      return `<tr><td class="name-col">${name}${firstResp?.family&&firstResp.family!==name?`<br><span style="font-size:0.68rem;color:#888">${firstResp.family}</span>`:''}</td>${cells}<td style="color:#2ecc71;font-weight:bold">${nbTotal||'—'}</td></tr>`;
     }).join('');
+    // Ligne totaux
+    const totalsRow=`<tr class="totals"><td class="name-col">Total présents</td>${ev.dates.map((_,i)=>{
+      const info=datesHtml[i];
+      return `<td>${info.totalPeople} pers${info.sleeping?`<br><span style="font-size:0.68rem;color:#888">🛏️ ${info.sleeping} dort</span>`:''}${ev.capacity?`<br><span style="font-size:0.68rem;color:${info.sleeping>ev.capacity?'#e74c3c':'#888'}">max ${ev.capacity}</span>`:''}</td>`;
+    }).join('')}<td></td></tr>`;
+    // Cal buttons pour chaque date
+    const calBtns=ev.dates.map(d=>`<div style="margin-bottom:4px;font-size:0.72rem;color:#888">${fmtDate(d.date,d.time)} : <a class="cal-btn" href="${gcalUrl(ev.title,d.date,d.time,ev.location)}" target="_blank">📅 Google</a> <button class="cal-btn cal-ics" onclick="dlICS('${ev.title.replace(/'/g,"\\'")}','${d.date}','${d.time||''}','${(ev.location||'').replace(/'/g,"\\'")}')">📥 .ics</button></div>`).join('');
+    const totalYes=ev.dates.reduce((s,d)=>s+d.responses.filter(r=>r.avail==='yes').reduce((a,r)=>a+r.nb,0),0);
     return `<div class="event-card">
       <div class="event-header" onclick="toggleBody('${ev.id}')">
         <span class="event-emoji">${ev.emoji||'🎉'}</span>
         <div class="event-info">
           <div class="event-title">${ev.title}</div>
-          <div class="event-meta">${ev.dates.length} date(s) · ${total} inscription(s)${ev.location?' · 📍'+ev.location:''}</div>
+          <div class="event-meta">${ev.dates.length} date(s) · ${allNames.length} réponse(s) · ${totalYes} personne(s) confirmée(s)${ev.location?' · 📍'+ev.location:''}</div>
         </div>
         <div class="event-btns" onclick="event.stopPropagation()">
-          <button class="btn btn-green btn-sm" onclick="openRegister('${ev.id}')">✋ S'inscrire</button>
-          ${isAdmin?`<button class="btn btn-outline btn-sm" onclick="openCreate('${ev.id}')">✏️</button><button class="btn btn-red btn-sm" onclick="deleteEvent('${ev.id}')">🗑️</button>`:''}
+          <button class="btn btn-g btn-sm" onclick="openRespond('${ev.id}')">✋ Répondre</button>
+          ${isAdmin?`<button class="btn btn-o btn-sm" onclick="openCreate('${ev.id}')">✏️</button><button class="btn btn-r btn-sm" onclick="deleteEvent('${ev.id}')">🗑️</button>`:''}
         </div>
       </div>
       <div class="event-body" id="body-${ev.id}">
         ${ev.desc?`<div class="event-desc">${ev.desc}</div>`:''}
-        ${datesHtml}
+        <div class="share-box">
+          <span style="font-size:0.8rem;color:#888">🔗 Partager :</span>
+          <span class="share-url">${pageUrl}</span>
+          <button class="share-copy" onclick="copyUrl('${pageUrl}')">Copier</button>
+        </div>
+        ${allNames.length?`<div class="doodle-wrap"><table class="doodle-table">${tableHead}${tableRows}${totalsRow}</table></div>`:'<div style="font-size:0.8rem;color:#555;margin:8px 0 12px">Aucune réponse pour l\'instant.</div>'}
+        <div style="margin-top:10px">${calBtns}</div>
       </div>
     </div>`;
   }).join('');
@@ -422,26 +468,19 @@ function render() {
 // ── INIT ──────────────────────────────────────────────────
 async function init() {
   try {
-    appData = await loadData();
-    if (!appData.events) appData.events = [];
+    appData=await loadData();
+    if (!appData.events) appData.events=[];
     render();
   } catch(e) {
-    document.getElementById('loading').innerHTML = `<div style="color:#e74c3c">❌ Erreur de chargement : ${e.message}</div>`;
+    document.getElementById('loading').innerHTML=`<div style="color:#e74c3c;padding:20px">❌ Erreur : ${e.message}</div>`;
   }
 }
-
 init();
-
-// Rafraîchit toutes les 30 secondes
-setInterval(async () => {
+setInterval(async()=>{
   try {
-    const fresh = await loadData();
-    if (JSON.stringify(fresh) !== JSON.stringify(appData)) {
-      appData = fresh;
-      if (!appData.events) appData.events = [];
-      render();
-    }
-  } catch(e) {}
+    const fresh=await loadData();
+    if (JSON.stringify(fresh)!==JSON.stringify(appData)) { appData=fresh; if(!appData.events) appData.events=[]; render(); }
+  } catch(e){}
 }, 30000);
 </script>
 </body>
