@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎉 Jura Events — Inscriptions</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #eee; min-height: 100vh; }
+    header { background: linear-gradient(135deg, #16213e, #1a6b3a); padding: 16px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #2ecc71; }
+    header h1 { font-size: 1.3rem; color: #fff; }
+    header .sub { font-size: 0.8rem; color: #aaa; }
+    .badge { background: #2ecc71; color: #111; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; margin-left: auto; font-weight: bold; cursor: pointer; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px 16px; }
+    .btn { padding: 8px 18px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.85rem; font-weight: bold; transition: all 0.2s; }
+    .btn-green { background: #2ecc71; color: #111; }
+    .btn-green:hover { background: #27ae60; }
+    .btn-outline { background: transparent; color: #2ecc71; border: 1px solid #2ecc71; }
+    .btn-outline:hover { background: #2ecc71; color: #111; }
+    .btn-red { background: #e74c3c; color: #fff; }
+    .btn-red:hover { background: #c0392b; }
+    .btn-sm { padding: 4px 10px; font-size: 0.75rem; }
+
+    /* MODAL */
+    .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:500; align-items:center; justify-content:center; }
+    .modal-bg.open { display:flex; }
+    .modal { background:#16213e; border-radius:14px; padding:24px; width:95%; max-width:560px; border:1px solid #2ecc71; max-height:90vh; overflow-y:auto; }
+    .modal h2 { font-size:1.1rem; color:#2ecc71; margin-bottom:16px; }
+    label { font-size:0.8rem; color:#aaa; display:block; margin-bottom:4px; margin-top:12px; }
+    input, textarea, select { width:100%; background:#0f3460; border:1px solid #333; border-radius:8px; padding:8px 12px; color:#eee; font-size:0.85rem; outline:none; }
+    input:focus, textarea:focus { border-color:#2ecc71; }
+    .dates-list { margin-top:8px; }
+    .date-row { display:flex; gap:8px; align-items:center; margin-bottom:6px; }
+    .date-row input { flex:1; }
+    .date-row button { flex-shrink:0; }
+    .add-date-btn { margin-top:6px; font-size:0.78rem; color:#2ecc71; background:none; border:1px dashed #2ecc71; border-radius:6px; padding:4px 10px; cursor:pointer; }
+    .form-actions { display:flex; gap:10px; margin-top:20px; justify-content:flex-end; }
+
+    /* EVENTS */
+    .events-grid { display:grid; gap:16px; }
+    .event-card { background:#16213e; border-radius:12px; border-left:4px solid #2ecc71; overflow:hidden; }
+    .event-header { padding:14px 16px; cursor:pointer; display:flex; align-items:center; gap:10px; }
+    .event-emoji { font-size:2em; }
+    .event-info { flex:1; }
+    .event-title { font-size:1rem; font-weight:bold; color:#fff; }
+    .event-meta { font-size:0.75rem; color:#888; margin-top:2px; }
+    .event-actions { display:flex; gap:6px; flex-shrink:0; }
+    .event-body { display:none; padding:0 16px 16px; }
+    .event-body.open { display:block; }
+    .event-desc { font-size:0.82rem; color:#bbb; margin-bottom:12px; background:#0f3460; padding:10px; border-radius:8px; }
+    .date-slot { background:#0f3460; border-radius:8px; padding:10px 12px; margin-bottom:8px; }
+    .date-slot-header { display:flex; align-items:center; gap:8px; }
+    .date-label { font-size:0.85rem; font-weight:bold; color:#2ecc71; flex:1; }
+    .reg-count { font-size:0.75rem; color:#888; }
+    .progress-bar { height:4px; background:#1a1a2e; border-radius:2px; margin:6px 0; }
+    .progress-fill { height:100%; background:#2ecc71; border-radius:2px; transition:width 0.3s; }
+    .registrations { margin-top:8px; }
+    .reg-item { display:flex; align-items:center; gap:6px; font-size:0.78rem; color:#ccc; padding:3px 0; border-bottom:1px solid #1a1a2e; }
+    .reg-item:last-child { border-bottom:none; }
+    .reg-name { flex:1; }
+    .reg-email { color:#888; font-size:0.72rem; }
+    .reg-del { background:none; border:none; color:#e74c3c; cursor:pointer; font-size:0.85rem; padding:2px 4px; }
+    .register-form { margin-top:12px; background:#1a1a2e; border-radius:8px; padding:12px; }
+    .register-form h4 { font-size:0.85rem; color:#2ecc71; margin-bottom:8px; }
+    .register-form .row { display:flex; gap:8px; }
+    .register-form .row input { flex:1; }
+    .date-checkboxes { margin:8px 0; }
+    .date-check { display:flex; align-items:center; gap:8px; margin-bottom:4px; font-size:0.82rem; }
+    .date-check input[type=checkbox] { width:auto; accent-color:#2ecc71; }
+    .cal-btns { display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
+    .cal-btn { font-size:0.72rem; padding:3px 9px; border-radius:6px; border:1px solid #3498db; color:#3498db; background:none; cursor:pointer; text-decoration:none; display:inline-block; }
+    .cal-btn:hover { background:#3498db; color:#fff; }
+    .cal-btn.ics { border-color:#9b59b6; color:#9b59b6; }
+    .cal-btn.ics:hover { background:#9b59b6; color:#fff; }
+
+    /* EMPTY */
+    .empty { text-align:center; padding:60px 20px; color:#555; }
+    .empty .big { font-size:3em; margin-bottom:12px; }
+    .empty p { font-size:0.9rem; }
+
+    /* ADMIN */
+    .admin-bar { background:#0f3460; border-bottom:1px solid #333; padding:8px 20px; font-size:0.78rem; color:#888; display:flex; align-items:center; gap:10px; }
+    .admin-bar span { color:#2ecc71; }
+
+    /* TOAST */
+    .toast { position:fixed; bottom:20px; right:20px; background:#2ecc71; color:#111; padding:10px 18px; border-radius:10px; font-size:0.85rem; font-weight:bold; z-index:999; opacity:0; transition:opacity 0.3s; pointer-events:none; }
+    .toast.show { opacity:1; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div style="font-size:2em">🎉</div>
+  <div>
+    <h1>Jura Events</h1>
+    <div class="sub">Inscriptions & planification d'événements</div>
+  </div>
+  <div class="badge" onclick="toggleAdmin()">⚙️ Admin</div>
+</header>
+
+<div id="admin-bar" class="admin-bar" style="display:none">
+  ⚙️ Mode admin actif — <span>Vous pouvez créer, modifier et supprimer des événements</span>
+  <button class="btn btn-sm btn-green" onclick="openCreateModal()" style="margin-left:auto">+ Nouvel événement</button>
+</div>
+
+<div class="container">
+  <div id="events-list" class="events-grid"></div>
+  <div id="empty-state" class="empty" style="display:none">
+    <div class="big">📅</div>
+    <p>Aucun événement pour l'instant.</p>
+    <p style="margin-top:8px;font-size:0.8rem">Active le mode admin pour en créer un !</p>
+  </div>
+</div>
+
+<!-- MODAL CRÉER/ÉDITER -->
+<div id="modal-event" class="modal-bg">
+  <div class="modal">
+    <h2 id="modal-title">✨ Nouvel événement</h2>
+    <label>Emoji / Icône</label>
+    <input type="text" id="f-emoji" placeholder="🎉" maxlength="4" style="width:80px">
+    <label>Titre *</label>
+    <input type="text" id="f-title" placeholder="Ex: Randonnée au Crêt Pela">
+    <label>Description</label>
+    <textarea id="f-desc" rows="2" placeholder="Informations sur l'événement…"></textarea>
+    <label>Lieu</label>
+    <input type="text" id="f-location" placeholder="Ex: Morez, Jura">
+    <label>Dates proposées *</label>
+    <div class="dates-list" id="dates-list"></div>
+    <button class="add-date-btn" onclick="addDateRow()">+ Ajouter une date</button>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-event')">Annuler</button>
+      <button class="btn btn-green" onclick="saveEvent()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL INSCRIPTION -->
+<div id="modal-register" class="modal-bg">
+  <div class="modal">
+    <h2>📝 S'inscrire</h2>
+    <label>Prénom *</label>
+    <input type="text" id="r-firstname" placeholder="Jean">
+    <label>Nom *</label>
+    <input type="text" id="r-lastname" placeholder="Dupont">
+    <label>Email (optionnel)</label>
+    <input type="email" id="r-email" placeholder="jean@exemple.com">
+    <label>Choisir la/les date(s) *</label>
+    <div class="date-checkboxes" id="r-dates"></div>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-register')">Annuler</button>
+      <button class="btn btn-green" onclick="submitRegistration()">✅ S'inscrire</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADMIN PASSWORD -->
+<div id="modal-admin" class="modal-bg">
+  <div class="modal">
+    <h2>🔑 Mode administrateur</h2>
+    <label>Mot de passe admin</label>
+    <input type="password" id="admin-pw" placeholder="Entrez le mot de passe" onkeydown="if(event.key==='Enter')checkAdmin()">
+    <div style="font-size:0.75rem;color:#888;margin-top:6px">Mot de passe par défaut : <code style="color:#2ecc71">jura2026</code></div>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-admin')">Annuler</button>
+      <button class="btn btn-green" onclick="checkAdmin()">Entrer</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+// ── STORAGE ──────────────────────────────────────────────
+const ADMIN_PW = 'jura2026';
+let isAdmin = false;
+let editingEventId = null;
+let registerEventId = null;
+
+function load() {
+  return JSON.parse(localStorage.getItem('jura_events') || '[]');
+}
+function save(events) {
+  localStorage.setItem('jura_events', JSON.stringify(events));
+}
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+}
+
+// ── TOAST ─────────────────────────────────────────────────
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ── ADMIN ─────────────────────────────────────────────────
+function toggleAdmin() {
+  if (isAdmin) {
+    isAdmin = false;
+    document.getElementById('admin-bar').style.display = 'none';
+    render();
+    return;
+  }
+  openModal('modal-admin');
+}
+function checkAdmin() {
+  const pw = document.getElementById('admin-pw').value;
+  if (pw === ADMIN_PW) {
+    isAdmin = true;
+    closeModal('modal-admin');
+    document.getElementById('admin-bar').style.display = 'flex';
+    document.getElementById('admin-pw').value = '';
+    toast('✅ Mode admin activé !');
+    render();
+  } else {
+    document.getElementById('admin-pw').style.borderColor = '#e74c3c';
+    setTimeout(() => document.getElementById('admin-pw').style.borderColor = '#333', 1500);
+  }
+}
+
+// ── MODAL ─────────────────────────────────────────────────
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// ── CREATE/EDIT EVENT ─────────────────────────────────────
+function openCreateModal(eventId = null) {
+  editingEventId = eventId;
+  document.getElementById('modal-title').textContent = eventId ? '✏️ Modifier l\'événement' : '✨ Nouvel événement';
+  document.getElementById('dates-list').innerHTML = '';
+  if (eventId) {
+    const ev = load().find(e => e.id === eventId);
+    if (ev) {
+      document.getElementById('f-emoji').value = ev.emoji || '🎉';
+      document.getElementById('f-title').value = ev.title;
+      document.getElementById('f-desc').value = ev.desc || '';
+      document.getElementById('f-location').value = ev.location || '';
+      (ev.dates || []).forEach(d => addDateRow(d.date, d.time, d.max));
+    }
+  } else {
+    document.getElementById('f-emoji').value = '🎉';
+    document.getElementById('f-title').value = '';
+    document.getElementById('f-desc').value = '';
+    document.getElementById('f-location').value = '';
+    addDateRow();
+  }
+  openModal('modal-event');
+}
+
+function addDateRow(date = '', time = '', max = '') {
+  const row = document.createElement('div');
+  row.className = 'date-row';
+  row.innerHTML = `
+    <input type="date" value="${date}" placeholder="Date">
+    <input type="time" value="${time}" placeholder="Heure" style="width:110px">
+    <input type="number" value="${max}" placeholder="Max" min="1" style="width:80px">
+    <button class="btn btn-red btn-sm" onclick="this.parentElement.remove()">✕</button>
+  `;
+  document.getElementById('dates-list').appendChild(row);
+}
+
+function saveEvent() {
+  const title = document.getElementById('f-title').value.trim();
+  if (!title) { toast('⚠️ Le titre est obligatoire'); return; }
+  const rows = document.querySelectorAll('#dates-list .date-row');
+  const dates = [];
+  rows.forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const date = inputs[0].value;
+    const time = inputs[1].value;
+    const max = parseInt(inputs[2].value) || 0;
+    if (date) dates.push({ id: uid(), date, time, max, registrations: [] });
+  });
+  if (!dates.length) { toast('⚠️ Ajoutez au moins une date'); return; }
+
+  const events = load();
+  if (editingEventId) {
+    const idx = events.findIndex(e => e.id === editingEventId);
+    if (idx >= 0) {
+      // keep existing registrations for matching dates
+      const existing = events[idx].dates || [];
+      dates.forEach(d => {
+        const prev = existing.find(e => e.date === d.date && e.time === d.time);
+        if (prev) d.registrations = prev.registrations;
+      });
+      events[idx] = { ...events[idx], emoji: document.getElementById('f-emoji').value || '🎉', title, desc: document.getElementById('f-desc').value, location: document.getElementById('f-location').value, dates };
+    }
+  } else {
+    events.push({ id: uid(), emoji: document.getElementById('f-emoji').value || '🎉', title, desc: document.getElementById('f-desc').value, location: document.getElementById('f-location').value, dates, createdAt: Date.now() });
+  }
+  save(events);
+  closeModal('modal-event');
+  render();
+  toast(editingEventId ? '✅ Événement mis à jour !' : '🎉 Événement créé !');
+}
+
+function deleteEvent(id) {
+  if (!confirm('Supprimer cet événement ?')) return;
+  save(load().filter(e => e.id !== id));
+  render();
+  toast('🗑️ Événement supprimé');
+}
+
+// ── REGISTER ──────────────────────────────────────────────
+function openRegister(eventId) {
+  registerEventId = eventId;
+  const ev = load().find(e => e.id === eventId);
+  if (!ev) return;
+  document.getElementById('r-firstname').value = '';
+  document.getElementById('r-lastname').value = '';
+  document.getElementById('r-email').value = '';
+  const cont = document.getElementById('r-dates');
+  cont.innerHTML = '';
+  ev.dates.forEach(d => {
+    const label = formatDate(d.date, d.time) + (d.max ? ` (${d.registrations.length}/${d.max})` : ` (${d.registrations.length} inscrits)`);
+    const full = d.max && d.registrations.length >= d.max;
+    cont.innerHTML += `<div class="date-check">
+      <input type="checkbox" id="dc-${d.id}" value="${d.id}" ${full ? 'disabled' : ''}>
+      <label for="dc-${d.id}" style="color:${full ? '#555' : '#eee'}">${label}${full ? ' — <span style="color:#e74c3c">Complet</span>' : ''}</label>
+    </div>`;
+  });
+  openModal('modal-register');
+}
+
+function submitRegistration() {
+  const fn = document.getElementById('r-firstname').value.trim();
+  const ln = document.getElementById('r-lastname').value.trim();
+  const email = document.getElementById('r-email').value.trim();
+  if (!fn || !ln) { toast('⚠️ Prénom et nom obligatoires'); return; }
+  const checked = [...document.querySelectorAll('#r-dates input:checked')].map(i => i.value);
+  if (!checked.length) { toast('⚠️ Choisissez au moins une date'); return; }
+  const events = load();
+  const ev = events.find(e => e.id === registerEventId);
+  if (!ev) return;
+  checked.forEach(dateId => {
+    const d = ev.dates.find(x => x.id === dateId);
+    if (d && !(d.max && d.registrations.length >= d.max)) {
+      d.registrations.push({ id: uid(), name: fn + ' ' + ln, email, at: Date.now() });
+    }
+  });
+  save(events);
+  closeModal('modal-register');
+  render();
+  toast(`✅ ${fn}, vous êtes inscrit(e) !`);
+}
+
+function deleteReg(eventId, dateId, regId) {
+  if (!isAdmin) return;
+  const events = load();
+  const ev = events.find(e => e.id === eventId);
+  if (!ev) return;
+  const d = ev.dates.find(x => x.id === dateId);
+  if (d) d.registrations = d.registrations.filter(r => r.id !== regId);
+  save(events);
+  render();
+  toast('🗑️ Inscription supprimée');
+}
+
+function toggleBody(id) {
+  const el = document.getElementById('body-' + id);
+  el.classList.toggle('open');
+}
+
+// ── CALENDAR EXPORT ────────────────────────────────────────
+function formatDate(date, time) {
+  if (!date) return '?';
+  const d = new Date(date + (time ? 'T' + time : 'T00:00'));
+  return d.toLocaleDateString('fr-FR', { weekday:'short', day:'numeric', month:'long' }) + (time ? ' à ' + time : '');
+}
+
+function toICSDate(date, time) {
+  const d = new Date(date + 'T' + (time || '00:00') + ':00');
+  return d.toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
+}
+
+function googleCalUrl(title, date, time, location) {
+  const start = date.replace(/-/g,'') + (time ? 'T' + time.replace(':','') + '00' : '');
+  const end = date.replace(/-/g,'') + (time ? 'T' + (String(parseInt(time.split(':')[0])+2)).padStart(2,'0') + time.split(':')[1] + '00' : '');
+  const params = new URLSearchParams({ action:'TEMPLATE', text: title, dates: start + '/' + end, location: location || '' });
+  return 'https://calendar.google.com/calendar/render?' + params.toString();
+}
+
+function downloadICS(evTitle, date, time, location) {
+  const start = toICSDate(date, time);
+  const d2 = new Date(date + 'T' + (time || '00:00') + ':00');
+  d2.setHours(d2.getHours() + 2);
+  const end = d2.toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
+  const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nDTSTART:${start}\nDTEND:${end}\nSUMMARY:${evTitle}\nLOCATION:${location||''}\nEND:VEVENT\nEND:VCALENDAR`;
+  const blob = new Blob([ics], { type: 'text/calendar' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = evTitle.replace(/\s+/g,'-') + '.ics';
+  a.click();
+}
+
+// ── RENDER ─────────────────────────────────────────────────
+function render() {
+  const events = load();
+  const list = document.getElementById('events-list');
+  const empty = document.getElementById('empty-state');
+  if (!events.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  list.innerHTML = events.map(ev => {
+    const totalRegs = ev.dates.reduce((s, d) => s + d.registrations.length, 0);
+    const datesHtml = ev.dates.map(d => {
+      const pct = d.max ? Math.min(100, Math.round(d.registrations.length / d.max * 100)) : 0;
+      const regsHtml = d.registrations.length ? d.registrations.map(r =>
+        `<div class="reg-item"><span class="reg-name">👤 ${r.name}</span><span class="reg-email">${r.email || ''}</span>${isAdmin ? `<button class="reg-del" onclick="deleteReg('${ev.id}','${d.id}','${r.id}')">✕</button>` : ''}</div>`
+      ).join('') : '<div style="font-size:0.75rem;color:#555;padding:4px 0">Aucune inscription</div>';
+      return `<div class="date-slot">
+        <div class="date-slot-header">
+          <span class="date-label">📅 ${formatDate(d.date, d.time)}</span>
+          <span class="reg-count">${d.registrations.length}${d.max ? '/'+d.max : ''} inscrits</span>
+        </div>
+        ${d.max ? `<div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>` : ''}
+        <div class="registrations">${regsHtml}</div>
+        <div class="cal-btns">
+          <a class="cal-btn" href="${googleCalUrl(ev.title, d.date, d.time, ev.location)}" target="_blank">📅 Google Cal</a>
+          <button class="cal-btn ics" onclick="downloadICS('${ev.title.replace(/'/g,"\\'")}','${d.date}','${d.time}','${(ev.location||'').replace(/'/g,"\\'")}')">📥 .ics</button>
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="event-card">
+      <div class="event-header" onclick="toggleBody('${ev.id}')">
+        <span class="event-emoji">${ev.emoji || '🎉'}</span>
+        <div class="event-info">
+          <div class="event-title">${ev.title}</div>
+          <div class="event-meta">${ev.dates.length} date(s) · ${totalRegs} inscription(s)${ev.location ? ' · 📍 ' + ev.location : ''}</div>
+        </div>
+        <div class="event-actions" onclick="event.stopPropagation()">
+          <button class="btn btn-green btn-sm" onclick="openRegister('${ev.id}')">✋ S'inscrire</button>
+          ${isAdmin ? `<button class="btn btn-outline btn-sm" onclick="openCreateModal('${ev.id}')">✏️</button><button class="btn btn-red btn-sm" onclick="deleteEvent('${ev.id}')">🗑️</button>` : ''}
+        </div>
+      </div>
+      <div class="event-body" id="body-${ev.id}">
+        ${ev.desc ? `<div class="event-desc">${ev.desc}</div>` : ''}
+        ${datesHtml}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── DEMO DATA ──────────────────────────────────────────────
+function loadDemo() {
+  if (load().length === 0) {
+    save([{
+      id: uid(), emoji: '🥾', title: 'Randonnée lac des Mortes', desc: 'Balade en famille autour du lac des Mortes depuis La Cure. ~8km, dénivelé faible.', location: 'La Cure, Haut-Jura',
+      dates: [
+        { id: uid(), date: '2026-05-03', time: '09:00', max: 15, registrations: [{id:uid(), name:'Mathieu Chevalier', email:'mathieu@morez.fr', at:Date.now()}] },
+        { id: uid(), date: '2026-05-10', time: '09:30', max: 15, registrations: [] }
+      ], createdAt: Date.now()
+    }, {
+      id: uid(), emoji: '🍕', title: 'Pizza party Morez', desc: 'On se retrouve pour une pizza et une bière ! Pas de chaussures de rando requises 😄', location: 'Morez (lieu à confirmer)',
+      dates: [
+        { id: uid(), date: '2026-04-18', time: '19:30', max: 20, registrations: [] }
+      ], createdAt: Date.now()
+    }]);
+  }
+}
+
+loadDemo();
+render();
+</script>
+</body>
+</html>
